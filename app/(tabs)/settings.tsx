@@ -161,8 +161,8 @@ export default function SettingsScreen() {
   const handleShare = async () => {
     try {
       await Share.share({
-        message: 'I just found VibeWork — the best focus timer with beautiful vibes! 🎧✨\n\nhttps://vibework.app',
-        url: 'https://vibework.app',
+        message: 'I just found VibeWork — the best focus timer with beautiful vibes! 🎧✨\n\nVibework',
+        url: 'https://vibework.notion.site/VibeWork-Unlock-Your-Flow-State-2b2ed3dea4dc80de9dffdcc9aae16be3',
       });
     } catch (error) {
       Alert.alert('Error', 'Could not share the app');
@@ -226,15 +226,15 @@ export default function SettingsScreen() {
         <Section title="Feedback & Community">
           <SettingRow
             label="Email Us"
-            description="hello@vibework.app"
+            description="founder@vibework.app"
             icon={Mail}
-            onPress={() => Linking.openURL('mailto:hello@vibework.app')}
+            onPress={() => Linking.openURL('mailto:arthurharry06@gmail.com')}
           />
           <SettingRow
             label="Instagram"
-            description="@vibework"
+            description="@vibe.work_"
             icon={Instagram}
-            onPress={() => Linking.openURL('https://instagram.com/vibework')}
+            onPress={() => Linking.openURL('https://instagram.com/vibe.work_')}
           />
           <SettingRow
             label="Suggest a Feature"
@@ -249,7 +249,7 @@ export default function SettingsScreen() {
           <SettingRow
             label="Help Center"
             icon={HelpCircle}
-            onPress={() => Linking.openURL('https://vibework.app/help')}
+            onPress={() => Linking.openURL('https://vibework.notion.site/VibeWork-Unlock-Your-Flow-State-2b2ed3dea4dc80de9dffdcc9aae16be3')}
           />
           <SettingRow
             label="About VibeWork"
