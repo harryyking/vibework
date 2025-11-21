@@ -10,7 +10,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'nativewind';
 import * as React from 'react';
 import { PomodoroProvider } from '@/context/PomodoroContext';
-import AsyncStorage from 'expo-sqlite/kv-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {GestureHandlerRootView} from 'react-native-gesture-handler'
 import { SQLiteProvider } from 'expo-sqlite';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';

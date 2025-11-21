@@ -51,12 +51,6 @@
       "react-native-video",
       "expo-sqlite",
       [
-        "expo-splash-screen",
-        {
-          "imageWidth": 200
-        }
-      ],
-      [
         "expo-video",
         {
           "supportsBackgroundPlayback": true,
