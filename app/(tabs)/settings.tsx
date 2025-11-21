@@ -148,7 +148,7 @@ export default function SettingsScreen() {
         await StoreReview.requestReview();
       } else {
         const storeUrl = Platform.select({
-          ios: 'https://apps.apple.com/app/idYOUR_APPLE_ID',
+          ios: 'https://apps.apple.com/app/6755574525',
           android: 'https://play.google.com/store/apps/details?id=com.harryyking.vibework',
         });
         if (storeUrl) Linking.openURL(storeUrl);
