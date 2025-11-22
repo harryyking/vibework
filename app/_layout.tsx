@@ -16,10 +16,14 @@ import { SQLiteProvider } from 'expo-sqlite';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { Platform } from 'react-native';
 import * as Notifications from 'expo-notifications'
+import { registerForPushNotificationsAsync, setupNotificationHandler } from '@/lib/constants';
 export {
   ErrorBoundary,
 } from 'expo-router';
 
+
+setupNotificationHandler();
+registerForPushNotificationsAsync().catch(() => {}); // silent fail = user denied
 
 SplashScreen.preventAutoHideAsync();
 
@@ -50,18 +54,6 @@ export default function RootLayout() {
     }
   }, [fontsLoaded, fontError]);
 
-  React.useEffect(() => {
-    const checkOnboarding = async () => {
-      const onboarded = await AsyncStorage.getItem('onboarded');
-      if (!onboarded) {
-        router.replace('/onboarding');
-      } else {
-        router.replace('/(tabs)/home');
-      }
-    };
-    checkOnboarding();
-  }, []);
-
 
   React.useEffect(() => {
     Notifications.setNotificationHandler({
@@ -89,7 +81,7 @@ export default function RootLayout() {
           <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
           <Stack>
             <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-            
+            <Stack.Screen name="index" options={{ headerShown: false }} />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           </Stack>
           <PortalHost />

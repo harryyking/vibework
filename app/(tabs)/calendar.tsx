@@ -62,6 +62,15 @@ interface EventRow {
   colorClass: string; // Kept for backward compatibility
 }
 
+const requestNotificationPermission = async () => {
+  const { status } = await Notifications.getPermissionsAsync();
+  if (status !== 'granted') {
+    const { status: newStatus } = await Notifications.requestPermissionsAsync();
+    return newStatus === 'granted';
+  }
+  return true;
+};
+
 // --- Main Component ---
 const CalendarScreen = () => {
   const theme = useTheme();
@@ -170,39 +179,74 @@ const CalendarScreen = () => {
   const handleAddEvent = async () => {
     const startMinutes = selectedHour * 60 + selectedMinute;
     const dateKey = formatDateKey(selectedDate);
-    // We save the Tag Name as the 'colorClass' or just rely on title lookup
-    const colorClass = selectedTag; 
-
+    const tagColor = colorHexMap[selectedTag] || '#6b7280';
+  
     try {
+      // 1. Save to DB
       const result = await db.runAsync(
-        'INSERT INTO events (title, start, duration, date, colorClass) VALUES (?, ?, ?, ?, ?)',
-        selectedTag, // This becomes the title
+        `INSERT INTO events (title, start, duration, date, colorClass, notificationId) 
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        selectedTag,
         startMinutes,
         selectedDuration,
         dateKey,
-        colorClass
+        selectedTag, // colorClass = tag name
+        null // notificationId placeholder
       );
-
+  
+      const newEventId = result.lastInsertRowId!.toString();
+  
+      // 2. Update UI
       const newEvent: Event = {
-        id: result.lastInsertRowId.toString(),
+        id: newEventId,
         title: selectedTag,
         start: startMinutes,
         duration: selectedDuration,
-        tagName: selectedTag
+        tagName: selectedTag,
       };
-
-      const currentEvents = eventsByDate[dateKey] || [];
-      setEventsByDate({
-        ...eventsByDate,
-        [dateKey]: [...currentEvents, newEvent],
-      });
-
-      // Schedule Notification logic...
-      // (Kept your existing logic here abbreviated for brevity)
-
+  
+      setEventsByDate(prev => ({
+        ...prev,
+        [dateKey]: [...(prev[dateKey] || []), newEvent],
+      }));
+  
+      // 3. Schedule Notification (only if in future)
+      const now = new Date();
+      const eventDateTime = new Date(selectedDate);
+      eventDateTime.setHours(selectedHour, selectedMinute, 0, 0);
+  
+      if (eventDateTime > now) {
+        const hasPermission = await requestNotificationPermission();
+        if (hasPermission) {
+          const notificationId = await Notifications.scheduleNotificationAsync({
+            content: {
+              title: `${selectedTag} Session Starting!`,
+              body: `Your ${selectedDuration}-minute ${selectedTag.toLowerCase()} session begins now.`,
+              sound: true,
+              badge: 1,
+            },
+            trigger: {
+              date: eventDateTime.getHours(),
+              type: Notifications.SchedulableTriggerInputTypes.DATE,
+            },
+          });
+  
+          // Save notification ID so we can cancel it later if needed
+          await db.runAsync(
+            `UPDATE events SET notificationId = ? WHERE id = ?`,
+            notificationId,
+            newEventId
+          );
+        }
+      }
+  
+      // Success! Close sheet
       bottomSheetRef.current?.close();
-    } catch (e) {
-      Alert.alert("Error", "Could not save event");
+      setSheetMode('main');
+  
+    } catch (error) {
+      console.error('Failed to add event:', error);
+      Alert.alert('Error', 'Could not save session. Please try again.');
     }
   };
 
