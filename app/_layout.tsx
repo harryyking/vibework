@@ -54,7 +54,7 @@ export default function RootLayout() {
     const checkOnboarding = async () => {
       const onboarded = await AsyncStorage.getItem('onboarded');
       if (!onboarded) {
-        router.replace('/');
+        router.replace('/onboarding');
       } else {
         router.replace('/(tabs)/home');
       }
@@ -88,7 +88,6 @@ export default function RootLayout() {
      <BottomSheetModalProvider>
           <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
           <Stack>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
             <Stack.Screen name="onboarding" options={{ headerShown: false }} />
             
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
