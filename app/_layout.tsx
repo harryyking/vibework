@@ -27,18 +27,6 @@ registerForPushNotificationsAsync().catch(() => {}); // silent fail = user denie
 
 SplashScreen.preventAutoHideAsync();
 
-async function setupNotificationChannel() {
-  if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('events', {
-      name: 'Event Reminders',
-      importance: Notifications.AndroidImportance.HIGH,
-      sound: 'default',
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
-    });
-  }
-}
-
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
   const router = useRouter()
