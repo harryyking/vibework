@@ -54,20 +54,6 @@ export default function RootLayout() {
     }
   }, [fontsLoaded, fontError]);
 
-
-  React.useEffect(() => {
-    Notifications.setNotificationHandler({
-      handleNotification: async () => ({
-        shouldShowAlert: true,
-        shouldPlaySound: true,
-        shouldSetBadge: false,
-        shouldShowBanner: true,
-        shouldShowList: true,
-      }),
-    });
-    setupNotificationChannel();
-  }, []);
-
   if (!fontsLoaded && !fontError) {
     return null; // Keep splash screen visible
   }
