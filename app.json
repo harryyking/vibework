@@ -20,10 +20,7 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.harryyking.vibework",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false,
-        "UIBackgroundModes": [
-          "audio"
-        ]
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
