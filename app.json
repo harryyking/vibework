@@ -47,13 +47,7 @@
       "expo-font",
       "react-native-video",
       "expo-sqlite",
-      [
         "expo-video",
-        {
-          "supportsBackgroundPlayback": true,
-          "supportsPictureInPicture": true
-        }
-      ],
       [
         "expo-notifications",
         {
